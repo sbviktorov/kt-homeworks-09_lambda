@@ -67,11 +67,16 @@ object Service {
     fun getUnreadChatsCount(userId: Int): Int {
 // так как запись в return сложночитаема, оставляю исходник
 //        for (chat in chatList) {
-//            if (chat.usersId.contains(userId) && !deletedChats.contains(chat.chatId)) {//убеждаемся что Id чата нет в списке удаленных и пользователь принимает участие в чате
-//                if (chat.lastViewedMessage[0].userId == userId && chat.lastViewedMessage[0].lastViewedMessageId != chat.message.last().messageId) {//если Id последнего сообщения в чате не соответствует Id последнего прочитанного сообщения - значит были добавлены более новые сообщения, соответственно добавляет этот чат в список с непрочтенными сообщениями
+//            if (chat.usersId.contains(userId) && !deletedChats.contains(chat.chatId)) {//убеждаемся что Id чата нет
+//            в списке удаленных и пользователь принимает участие в чате
+//                if (chat.lastViewedMessage[0].userId == userId
+//                && chat.lastViewedMessage[0].lastViewedMessageId != chat.message.last().messageId) {
+// если Id последнего сообщения в чате не соответствует Id последнего прочитанного сообщения - значит были добавлены
+// более новые сообщения, соответственно добавляет этот чат в список с непрочтенными сообщениями
 //                    getChatsForUser += chat
 //                }
-//                if (chat.lastViewedMessage[1].userId == userId && chat.lastViewedMessage[1].lastViewedMessageId != chat.message.last().messageId) {
+//                if (chat.lastViewedMessage[1].userId == userId
+//                && chat.lastViewedMessage[1].lastViewedMessageId != chat.message.last().messageId) {
 //                    getChatsForUser += chat
 //                }
 //            }
@@ -90,7 +95,8 @@ object Service {
         if (deletedChats.contains(chatId)) {//убеждаемся, что чата нет в списке удаленных
             return listOf<Message>()
         }
-        if (chatList[chatId].lastViewedMessage[0].userId == userId) { //получаем Id последнего прочитанного сообщения пользователем
+        if (chatList[chatId].lastViewedMessage[0].userId == userId) { //получаем Id последнего прочитанного
+            // сообщения пользователем
             lastId = chatList[chatId].lastViewedMessage[0].lastViewedMessageId
             chatList[chatId].lastViewedMessage[0].lastViewedMessageId =
                 chatList[chatId].message.last().messageId
@@ -113,7 +119,6 @@ object Service {
     }
 
     fun deleteMessage(userId: Int, chatId: Int, messageId: Int): Boolean { //удаление сообщений
-        var needToDeleteChat = true
         var result = false
         try {
             var index = -1
@@ -128,7 +133,8 @@ object Service {
                     break
                 }
             }
-            if (chatList[chatId].message[index].authorId == userId && !deletedMessages.contains(messageId)) {//проверяем, что сообщение с такими параметрами существует и оно отсутствует в списке удаленных
+            if (chatList[chatId].message[index].authorId == userId && !deletedMessages.contains(messageId)) {
+                //проверяем, что сообщение с такими параметрами существует и оно отсутствует в списке удаленных
                 deletedMessages += messageId
                 println("Удаление сообщения id=$messageId прошло успешно")
                 result = true
