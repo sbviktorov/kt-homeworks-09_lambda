@@ -125,10 +125,8 @@ class ServiceTest {
         val newExpectedCountOfNewMessagesFor303InChat1 =
             0//после предыдущей загрузки новых сообщений список должен быть пуст
         assertEquals(newExpectedCountOfNewMessagesFor303InChat1, Service.getNewMessagesByChat(303, 1).size)
-        println(Service.deletedChats)
         Service.send(101, 202, "hi")
         Service.deleteChat(101, 0)
-        println(Service.deletedChats)
         assertEquals(0, Service.getNewMessagesByChat(101, 0).size)
         assertEquals(0, Service.getNewMessagesByChat(202, 0).size)
     }
