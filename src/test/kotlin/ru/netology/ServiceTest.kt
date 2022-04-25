@@ -1,8 +1,6 @@
 package ru.netology
 
-import org.junit.After
 import org.junit.Test
-
 import org.junit.Assert.*
 import org.junit.Before
 import ru.netology.exceptions.QuantityOfChatsExceeded
@@ -78,9 +76,11 @@ class ServiceTest {
         val chatsFor101 = Service.getChat(101)
         val chatsFor202 = Service.getChat(202)
         val chatsFor303 = Service.getChat(303)
+        val chatsFor888 = Service.getChat(808)
         val expectedChatsFor101Size = 2
         val expectedChatsFor202Size = 1
         val expectedChatsFor303Size = 1
+        val expectedChatsFor888Size = 0
         assertEquals(expectedChatsFor101Size, chatsFor101.size)
         assertEquals(expectedChat0Id, chatsFor101[0].chatId)
         assertEquals(expectedChat1Id, chatsFor101[1].chatId)
@@ -88,6 +88,7 @@ class ServiceTest {
         assertEquals(expectedChat0Id, chatsFor202[0].chatId)
         assertEquals(expectedChatsFor303Size, chatsFor303.size)
         assertEquals(expectedChat1Id, chatsFor303[0].chatId)
+        assertEquals(expectedChatsFor888Size, chatsFor888.size)
     }
 
     @Test
@@ -124,12 +125,18 @@ class ServiceTest {
         val newExpectedCountOfNewMessagesFor303InChat1 =
             0//после предыдущей загрузки новых сообщений список должен быть пуст
         assertEquals(newExpectedCountOfNewMessagesFor303InChat1, Service.getNewMessagesByChat(303, 1).size)
+        println(Service.deletedChats)
+        Service.send(101, 202, "hi")
+        Service.deleteChat(101, 0)
+        println(Service.deletedChats)
+        assertEquals(0, Service.getNewMessagesByChat(101, 0).size)
+        assertEquals(0, Service.getNewMessagesByChat(202, 0).size)
     }
 
     @Test
     fun getNewMessagesByDeletedChat() {
         addMessages()
-        Service.deleteChat(101,0)
+        Service.deleteChat(101, 0)
         val expectedCountOfNewMessagesFor101InChat0 = 0
         val expectedCountOfNewMessagesFor202InChat0 = 0
         assertEquals(expectedCountOfNewMessagesFor101InChat0, Service.getNewMessagesByChat(101, 0).size)
